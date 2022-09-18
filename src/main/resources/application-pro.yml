@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    username: lrc_short_chain
+    password: lrc_short_chain
+    url: jdbc:p6spy:mysql://qq.linrucahng.work:3306/oauth_resource_project?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
