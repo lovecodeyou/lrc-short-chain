@@ -44,13 +44,6 @@
 		</dependency>
 
 
-		<!-- SQL分析打印 -->
-		<!--<dependency>-->
-		<!--	<groupId>p6spy</groupId>-->
-		<!--	<artifactId>p6spy</artifactId>-->
-		<!--	<version>3.9.1</version>-->
-		<!--</dependency>-->
-
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>

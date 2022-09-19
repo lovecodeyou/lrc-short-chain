@@ -1,5 +1,6 @@
 package work.linruchang.lrcshortchain.bean;
 
+import com.ejlchina.searcher.bean.DbField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,11 +42,13 @@ public class LinkInfo implements Serializable {
     /**
      * 描述
      */
+    @DbField("`desc`")
     String desc;
 
     /**
      * 所属用户
      */
+    @DbField("`user`")
     String user;
 
 }
