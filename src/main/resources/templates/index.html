@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/css/element-plus.css" />
+    <link rel="stylesheet" href="/css/element-plus.css"/>
     <script src="/js/vue3.js"></script>
     <script src="/js/element-plus.js"></script>
+    <script src="/js/axios.min.js"></script>
 
 </head>
 <body>
-    <div id="app">
-        <h1>{{message}}</h1>
-        <el-button type="primary">Primary</el-button>
-    </div>
+<div id="app">
+    <h1>{{message}}</h1>
+    <el-button type="primary">Primary</el-button>
+</div>
 </body>
 
 <script>
+    const request = axios.create({})
+
     Vue.createApp({
         data() {
             return {
                 count: 0,
                 message: 'Hello Vue!'
+            }
+        },
+        methods: {
+            test1: async function () {
+
             }
         }
     }).use(ElementPlus).mount('#app')
