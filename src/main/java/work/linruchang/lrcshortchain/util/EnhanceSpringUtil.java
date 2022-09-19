@@ -306,4 +306,14 @@ public class EnhanceSpringUtil extends SpringUtil {
         return cookieList;
     }
 
+    /**
+     * 获取当前请求的URL前缀
+     * @return
+     */
+    public static String getCurrentContextUrl() {
+        HttpServletRequest currrentRequest = getCurrrentRequest();
+        return StrUtil.format("{}://{}:{}/{}", currrentRequest.getScheme(),currrentRequest.getServerName(),  currrentRequest.getServerPort() , currrentRequest.getContextPath());
+    }
+
+
 }

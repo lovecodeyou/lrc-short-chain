@@ -1,7 +1,9 @@
 package work.linruchang.lrcshortchain.controller;
 
+import cn.hutool.core.lang.Console;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import work.linruchang.lrcshortchain.util.EnhanceSpringUtil;
 
 /**
  * @author LinRuChang
@@ -18,6 +20,8 @@ public class IndexController {
      */
     @GetMapping(value = {"","index","index.html","index.htm"})
     public String indexPage() {
+        String currentContextUrl = EnhanceSpringUtil.getCurrentContextUrl();
+        Console.log(currentContextUrl);
         return "index";
     }
 
