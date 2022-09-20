@@ -11,8 +11,8 @@
 </head>
 <body>
 <div id="app">
-    <h1>{{message}}</h1>
-    <el-button type="primary">Primary</el-button>
+    <el-input v-model="sourceLink" type="textarea" />
+    <el-button type="primary" @click="generateShortLink">生成短链</el-button>
 </div>
 </body>
 
@@ -22,13 +22,15 @@
     Vue.createApp({
         data() {
             return {
-                count: 0,
-                message: 'Hello Vue!'
+                sourceLink: ''
             }
         },
         methods: {
-            test1: async function () {
-
+            generateShortLink: async function () {
+                axios.post('/user', {
+                    firstName: 'Fred',
+                    lastName: 'Flintstone'
+                })
             }
         }
     }).use(ElementPlus).mount('#app')

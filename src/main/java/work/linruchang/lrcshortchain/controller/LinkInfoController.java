@@ -3,6 +3,7 @@ package work.linruchang.lrcshortchain.controller;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import work.linruchang.lrcshortchain.bean.LinkInfo;
@@ -44,8 +45,11 @@ public class LinkInfoController {
 
     @GetMapping("{uuid}")
     public ResponseResult<LinkInfo> redirectSourceLink(@PathVariable String uuid) {
-
-        return null;
+        LinkInfo resultLinkInfo = (LinkInfo) EhcacheUtil.get(uuid);
+        if(resultLinkInfo == null) {
+            resultLinkInfo = linkInfoService.getOne(Wrappers.<LinkInfo>lambdaQuery().eq(LinkInfo::getUuid,uuid), false);
+        }
+        return resultLinkInfo != null ? ResponseResult.success(resultLinkInfo) : ResponseResult.fail(null,"短链不存在，请检查");
     }
 
 }
