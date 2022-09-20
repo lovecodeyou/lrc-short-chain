@@ -9,37 +9,54 @@
     <script src="/js/element-plus.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/layer.js"></script>
-
+    <style>
+        .box-card {
+            width: 50%;
+            text-align: center;
+            margin: 10% auto;
+            padding: 1%;
+        }
+        .generateShortLinkButton,.result {
+            margin-top: 3%;
+        }
+    </style>
 </head>
 <body>
 <div id="vueApp">
-    <el-input v-model="sourceLink" type="textarea"/>
-    <div>
-        <el-button type="primary" @click="generateShortLink">生成短链</el-button>
-        <el-color-picker v-model="color" show-alpha />
-    </div>
+    <el-card class="box-card">
+        <el-input v-model="sourceLink" placeholder="请输入原始链接" ></el-input>
+        <el-button class="generateShortLinkButton" type="primary" @click="generateShortLink">生成短链</el-button>
+        <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" title="success alert" type="success" />
+    </el-card>
 </div>
 </body>
 
 <script>
 
     window.onload = function () {
-        // const request = axios.create({})
+        const request = axios.create({})
         const {createApp} = Vue
         createApp({
             data() {
                 return {
-                    sourceLink: 'fdsfsd',
-                    color: 'rgba(19, 206, 102, 0.8)'
+                    sourceLink: '',
+                    currentShortLink: ''
                 }
             },
             methods: {
                 generateShortLink: async function () {
-                    layer.msg(this.sourceLink)
-                    // let {data:data} = await request.post('/user', {
-                    //     sourceLink: this.sourceLink,
-                    // })
-                    // console.log(data)
+                    if(this.sourceLink && this.sourceLink.length > 0) {
+                        let {data:data} = await request.post('/link-info', {
+                            sourceLink: this.sourceLink,
+                        })
+                        this.currentShortLink = data.result.shortLink
+                    }else {
+                        ElementPlus.ElMessage({
+                            showClose: true,
+                            message: '请输入需要短链的链接',
+                            type: 'warning',
+                        })
+                    }
                 }
             }
         }).use(ElementPlus).mount('#vueApp')
