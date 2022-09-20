@@ -4,36 +4,48 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/css/element-plus.css"/>
-    <script src="/js/vue3.js"></script>
-    <script src="/js/element-plus.js"></script>
+    <script src="/js/vue3.2.37.global.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/element-plus.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/layer.js"></script>
 
 </head>
 <body>
-<div id="app">
-    <el-input v-model="sourceLink" type="textarea" />
-    <el-button type="primary" @click="generateShortLink">生成短链</el-button>
+<div id="vueApp">
+    <el-input v-model="sourceLink" type="textarea"/>
+    <div>
+        <el-button type="primary" @click="generateShortLink">生成短链</el-button>
+        <el-color-picker v-model="color" show-alpha />
+    </div>
 </div>
 </body>
 
 <script>
-    const request = axios.create({})
 
-    Vue.createApp({
-        data() {
-            return {
-                sourceLink: ''
+    window.onload = function () {
+        // const request = axios.create({})
+        const {createApp} = Vue
+        createApp({
+            data() {
+                return {
+                    sourceLink: 'fdsfsd',
+                    color: 'rgba(19, 206, 102, 0.8)'
+                }
+            },
+            methods: {
+                generateShortLink: async function () {
+                    layer.msg(this.sourceLink)
+                    // let {data:data} = await request.post('/user', {
+                    //     sourceLink: this.sourceLink,
+                    // })
+                    // console.log(data)
+                }
             }
-        },
-        methods: {
-            generateShortLink: async function () {
-                axios.post('/user', {
-                    firstName: 'Fred',
-                    lastName: 'Flintstone'
-                })
-            }
-        }
-    }).use(ElementPlus).mount('#app')
+        }).use(ElementPlus).mount('#vueApp')
+
+    };
+
 
 </script>
 
