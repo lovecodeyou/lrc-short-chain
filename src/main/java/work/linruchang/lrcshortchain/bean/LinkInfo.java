@@ -53,11 +53,13 @@ public class LinkInfo extends Model<LinkInfo> implements Serializable {
     /**
      * 描述
      */
+    @TableField("`desc`")
     String desc;
 
     /**
      * 所属用户
      */
+    @TableField("`user`")
     String user;
 
     @TableField(fill = FieldFill.INSERT)

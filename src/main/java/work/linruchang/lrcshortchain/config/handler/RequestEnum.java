@@ -80,7 +80,10 @@ public class RequestEnum {
 
 
 
-        TASK_EXECUTE_ERROR("-3000", "任务执行异常");
+        TASK_EXECUTE_ERROR("-3000", "任务执行异常"),
+
+
+        SOURCE_LINK_ERROR("-4000", "原链非Http链接，请检查");
 
         /**响应码**/
         String code;

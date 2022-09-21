@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>在线短链生成器</title>
     <link rel="stylesheet" href="/css/element-plus.css"/>
     <script src="/js/vue3.2.37.global.js"></script>
+    <script src="/js/vue-router.4.1.5.global.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/element-plus.js"></script>
+    <script src="/js/elementui-plus-icons-vue.min.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/layer.js"></script>
     <script src="/js/copy-to-clipboardPublic.js"></script>
@@ -23,108 +25,40 @@
         .resultTag {
             width: 100%;
             padding: 3%;
+            font-size: 14px;
         }
+        .resultTag .el-tag__content {
+            width: 100%;
+            position: relative;
+        }
+
+
         .resultCopyButton {
             text-align: right;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
     </style>
 </head>
 <body>
 <div id="vueApp">
-    <el-card class="box-card">
-        <el-input v-model="sourceLink" placeholder="请输入原始链接" ></el-input>
-        <el-button class="generateShortLinkButton" type="primary" @click="generateShortLink">生成短链</el-button>
-        <!-- <el-button class="copyShortLinkContent" type="primary" @click="copyShortLinkContent">拷贝</el-button> -->
-        <!-- <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" :title="currentShortLink" type="success" /> -->
-        <!-- <el-alert  class="result" center closable="false" :title="currentShortLink" type="success" /> -->
-
-        <div>
-            <el-tag class="resultTag" v-if="currentShortLink && currentShortLink.length>0"  :type="success">
-                {{ currentShortLink }}
-                <el-button class="resultCopyButton" @click="copyShortLinkContent" type="primary">复制</el-button>
-            </el-tag>
-        </div>
-
-
-    </el-card>
+    <router-view></router-view>
 </div>
 </body>
 
-<script>
 
-    function strIsNotEmpty(content) {
-        return content && content.length > 0;
-    }
-
-    function successMessage(message) {
-        ElementPlus.ElMessage({
-            showClose: true,
-            message: message,
-            type: 'success',
-        })
-    }
-
-    function warningMessage(message) {
-        ElementPlus.ElMessage({
-            showClose: true,
-            message: message,
-            type: 'warning',
-        })
-    }
-
-    function errorMessage(message) {
-        ElementPlus.ElMessage({
-            showClose: true,
-            message: message,
-            type: 'error',
-        })
-    }
-</script>
-
+<script src="/utils/smallUtil.js"></script>
+<script src="/view/generateShortLinkPage.js"></script>
+<script src="/view/errorPage.js"></script>
+<script src="/router/my-router.js"></script>
 <script>
 
     window.onload = function () {
-        const request = axios.create({})
         const {createApp} = Vue
         createApp({
-            data() {
-                return {
-                    sourceLink: 'fsdfsd',
-                    currentShortLink: 'fsdfsd'
-                }
-            },
-            methods: {
-                generateShortLink: async function () {
-                    console.log(this.sourceLink)
-                    if(strIsNotEmpty(this.sourceLink)) {
-                        let response = await request.post('/link-info/generate', {
-                            sourceLink: this.sourceLink,
-                        }).catch(function (error){
-                            console.log(error);
-                            errorMessage("短链获取失败")
-                        })
-
-                        if(response.status >=200 && response.status < 300) {
-                            this.currentShortLink = response.data.result.shortLink
-                        }else {
-                            errorMessage(response.data.result.message);
-                        }
-                    }else {
-                        warningMessage('请输入需要短链的链接');
-                    }
-                },
-                copyShortLinkContent: function () {
-                    if(strIsNotEmpty(this.currentShortLink)) {
-                        copyToClipboard(this.currentShortLink);
-                        successMessage('复制成功')
-                    }else {
-                        warningMessage('无可复制的短链');
-                    }
-
-                }
-            }
-        }).use(ElementPlus).mount('#vueApp')
-
+        }).use(ElementPlus).use(myRouter).mount('#vueApp')
     };
 
 
