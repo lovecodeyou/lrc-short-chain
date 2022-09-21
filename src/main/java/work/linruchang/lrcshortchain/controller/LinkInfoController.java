@@ -8,6 +8,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import work.linruchang.lrcshortchain.bean.LinkInfo;
 import work.linruchang.lrcshortchain.config.handler.RequestEnum;
@@ -17,14 +18,13 @@ import work.linruchang.lrcshortchain.service.LinkInfoService;
 import work.linruchang.lrcshortchain.util.EhcacheUtil;
 import work.linruchang.lrcshortchain.util.EnhanceSpringUtil;
 
-import java.io.Serializable;
-
 /**
  * @author LinRuChang
  * @version 1.0
  * @date 2022/09/20
  * @since 1.8
  **/
+@Controller
 @RequestMapping("link-info")
 public class LinkInfoController {
 
