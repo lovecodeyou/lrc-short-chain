@@ -1,0 +1,30 @@
+.box-card {
+    width: 50%;
+    text-align: center;
+    margin: 10% auto;
+    padding: 1%;
+}
+
+.generateShortLinkButton, .result, .resultTagConteiner {
+    margin-top: 3%
+}
+
+.resultTag {
+    width: 100%;
+    padding: 3%;
+    font-size: 14px;
+}
+
+.resultTag .el-tag__content {
+    width: 100%;
+    position: relative;
+}
+
+
+.resultCopyButton {
+    text-align: right;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}

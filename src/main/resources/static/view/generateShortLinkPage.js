@@ -9,7 +9,7 @@ const GenerateShortLinkPage = {
         <!-- <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" :title="currentShortLink" type="success" /> -->
         <!-- <el-alert  class="result" center closable="false" :title="currentShortLink" type="success" /> -->
 
-        <div v-if="currentShortLink && currentShortLink.length>0">
+        <div v-if="currentShortLink && currentShortLink.length>0" class="resultTagConteiner">
             <el-tag class="resultTag"   type="success">
                 {{ currentShortLink }}
                 
@@ -45,7 +45,7 @@ const GenerateShortLinkPage = {
 
                 if (response.status >= 200 && response.status < 300) {
 
-                    if(response.data.result.code == '200') {
+                    if(response.data.code == '200') {
                         successMessage("生成短链成功")
                         this.currentShortLink = response.data.result.shortLink
                     }else {
