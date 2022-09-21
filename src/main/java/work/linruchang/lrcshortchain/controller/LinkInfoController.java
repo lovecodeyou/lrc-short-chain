@@ -43,10 +43,9 @@ public class LinkInfoController {
 
         String linkUuid = UUID.fastUUID().toString(true);
         generateLinkInfo = generateLinkInfo
-                .setShortLink(StrUtil.format("{}/link-info/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid))
+                .setShortLink(StrUtil.format("{}/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid))
                 .setUuid(linkUuid)
                 .setSourceUserIp(ServletUtil.getClientIP(EnhanceSpringUtil.getCurrrentRequest()));
-
 
         boolean saveFlag = linkInfoService.save(generateLinkInfo);
         if(saveFlag) {

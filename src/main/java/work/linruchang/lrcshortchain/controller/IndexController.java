@@ -1,8 +1,10 @@
 package work.linruchang.lrcshortchain.controller;
 
 import cn.hutool.core.lang.Console;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import work.linruchang.lrcshortchain.util.EnhanceSpringUtil;
 
 /**
@@ -13,6 +15,9 @@ import work.linruchang.lrcshortchain.util.EnhanceSpringUtil;
  **/
 @Controller
 public class IndexController {
+
+    @Autowired
+    LinkInfoController linkInfoController;
 
     /**
      * 首页
@@ -25,4 +30,13 @@ public class IndexController {
         return "index";
     }
 
+    /**
+     * 短链跳转到原链
+     * @param uuid
+     * @return
+     */
+    @GetMapping("{uuid}")
+    public String redirectSourceLink(@PathVariable String uuid) {
+        return linkInfoController.redirectSourceLink(uuid);
+    }
 }
