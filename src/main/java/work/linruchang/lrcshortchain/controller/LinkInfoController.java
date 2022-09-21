@@ -3,6 +3,8 @@ package work.linruchang.lrcshortchain.controller;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +34,17 @@ public class LinkInfoController {
      * @param generateLinkInfo
      * @return
      */
-    @PostMapping
-    public ResponseResult<LinkInfo> generateShortLink(LinkInfo generateLinkInfo) {
+    @PostMapping("generate")
+    public ResponseResult<LinkInfo> generateShortLink(@RequestBody LinkInfo generateLinkInfo) {
+
+
         String linkUuid = UUID.fastUUID().toString(true);
-        generateLinkInfo = generateLinkInfo.setShortLink(StrUtil.format("{}/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid));
+        generateLinkInfo = generateLinkInfo
+                .setShortLink(StrUtil.format("{}/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid))
+                .setUuid(linkUuid)
+                .setSourceUserIp(EnhanceSpringUtil.getCurrrentRequest().getRemoteAddr());
+
+
         boolean saveFlag = linkInfoService.save(generateLinkInfo);
         if(saveFlag) {
             EhcacheUtil.set(linkUuid, generateLinkInfo, DateUnit.DAY.getMillis());

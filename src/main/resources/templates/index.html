@@ -9,6 +9,7 @@
     <script src="/js/element-plus.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/layer.js"></script>
+    <script src="/js/copy-to-clipboardPublic.js"></script>
     <style>
         .box-card {
             width: 50%;
@@ -26,10 +27,36 @@
     <el-card class="box-card">
         <el-input v-model="sourceLink" placeholder="请输入原始链接" ></el-input>
         <el-button class="generateShortLinkButton" type="primary" @click="generateShortLink">生成短链</el-button>
-        <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" title="success alert" type="success" />
+        <el-button class="copyShortLinkContent" type="primary" @click="copyShortLinkContent">拷贝</el-button>
+        <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" :title="currentShortLink" type="success" />
     </el-card>
 </div>
 </body>
+
+<script>
+
+    function strIsNotEmpty(content) {
+        return content && content > 0;
+    }
+
+    function successMessage(message) {
+        ElementPlus.ElMessage({
+            showClose: true,
+            message: message,
+            type: 'success',
+        })
+    }
+
+    function warningMessage(message) {
+        ElementPlus.ElMessage({
+            showClose: true,
+            message: message,
+            type: 'warning',
+        })
+    }
+
+
+</script>
 
 <script>
 
@@ -45,18 +72,24 @@
             },
             methods: {
                 generateShortLink: async function () {
-                    if(this.sourceLink && this.sourceLink.length > 0) {
-                        let {data:data} = await request.post('/link-info', {
+                    if(strIsNotEmpty(this.sourceLink)) {
+                        let {data:data} = await request.post('/link-info/generate', {
                             sourceLink: this.sourceLink,
                         })
+                        console.log(data);
                         this.currentShortLink = data.result.shortLink
                     }else {
-                        ElementPlus.ElMessage({
-                            showClose: true,
-                            message: '请输入需要短链的链接',
-                            type: 'warning',
-                        })
+                        warningMessage('请输入需要短链的链接');
                     }
+                },
+                copyShortLinkContent: function () {
+                    if(strIsNotEmpty(this.currentShortLink)) {
+                        copyToClipboard(this.currentShortLink);
+                        successMessage('复制成功')
+                    }else {
+                        warningMessage('无可复制的短链');
+                    }
+
                 }
             }
         }).use(ElementPlus).mount('#vueApp')

@@ -67,6 +67,9 @@ public class LinkInfo extends Model<LinkInfo> implements Serializable {
     Date updateTime;
 
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     Integer isDel;
+
+    String sourceUserIp;
 
 }

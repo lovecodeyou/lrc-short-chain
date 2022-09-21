@@ -312,7 +312,9 @@ public class EnhanceSpringUtil extends SpringUtil {
      */
     public static String getCurrentContextUrl() {
         HttpServletRequest currrentRequest = getCurrrentRequest();
-        return StrUtil.format("{}://{}:{}/{}", currrentRequest.getScheme(),currrentRequest.getServerName(),  currrentRequest.getServerPort() , currrentRequest.getContextPath());
+        String contextPath = StrUtil.format("{}://{}:{}/{}", currrentRequest.getScheme(), currrentRequest.getServerName(), currrentRequest.getServerPort(), currrentRequest.getContextPath());
+        contextPath = StrUtil.removeSuffix(contextPath, "/");
+        return contextPath;
     }
 
 

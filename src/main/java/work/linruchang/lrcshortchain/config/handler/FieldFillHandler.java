@@ -17,8 +17,9 @@ import java.util.Date;
 public class FieldFillHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createTime", () -> new Date(), Date.class);
-        this.strictInsertFill(metaObject, "updateTime", () -> new Date(), Date.class);
+        this.strictInsertFill(metaObject, "createTime", Date::new, Date.class);
+        this.strictInsertFill(metaObject, "updateTime", Date::new, Date.class);
+        this.strictInsertFill(metaObject, "isDel", () -> Integer.valueOf(0), Integer.class);
     }
 
     @Override
