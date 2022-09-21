@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class LinkInfoController {
         generateLinkInfo = generateLinkInfo
                 .setShortLink(StrUtil.format("{}/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid))
                 .setUuid(linkUuid)
-                .setSourceUserIp(EnhanceSpringUtil.getCurrrentRequest().getRemoteAddr());
+                .setSourceUserIp(ServletUtil.getClientIP(EnhanceSpringUtil.getCurrrentRequest()));
 
 
         boolean saveFlag = linkInfoService.save(generateLinkInfo);

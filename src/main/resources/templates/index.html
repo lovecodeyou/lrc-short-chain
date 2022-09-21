@@ -18,7 +18,14 @@
             padding: 1%;
         }
         .generateShortLinkButton,.result {
-            margin-top: 3%;
+            margin: 3% auto;
+        }
+        .resultTag {
+            width: 100%;
+            padding: 3%;
+        }
+        .resultCopyButton {
+            text-align: right;
         }
     </style>
 </head>
@@ -27,8 +34,18 @@
     <el-card class="box-card">
         <el-input v-model="sourceLink" placeholder="请输入原始链接" ></el-input>
         <el-button class="generateShortLinkButton" type="primary" @click="generateShortLink">生成短链</el-button>
-        <el-button class="copyShortLinkContent" type="primary" @click="copyShortLinkContent">拷贝</el-button>
-        <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" :title="currentShortLink" type="success" />
+        <!-- <el-button class="copyShortLinkContent" type="primary" @click="copyShortLinkContent">拷贝</el-button> -->
+        <!-- <el-alert v-if="currentShortLink && currentShortLink.length>0" class="result" center closable="false" :title="currentShortLink" type="success" /> -->
+        <!-- <el-alert  class="result" center closable="false" :title="currentShortLink" type="success" /> -->
+
+        <div>
+            <el-tag class="resultTag" v-if="currentShortLink && currentShortLink.length>0"  :type="success">
+                {{ currentShortLink }}
+                <el-button class="resultCopyButton" @click="copyShortLinkContent" type="primary">复制</el-button>
+            </el-tag>
+        </div>
+
+
     </el-card>
 </div>
 </body>
@@ -36,7 +53,7 @@
 <script>
 
     function strIsNotEmpty(content) {
-        return content && content > 0;
+        return content && content.length > 0;
     }
 
     function successMessage(message) {
@@ -55,7 +72,13 @@
         })
     }
 
-
+    function errorMessage(message) {
+        ElementPlus.ElMessage({
+            showClose: true,
+            message: message,
+            type: 'error',
+        })
+    }
 </script>
 
 <script>
@@ -66,18 +89,26 @@
         createApp({
             data() {
                 return {
-                    sourceLink: '',
-                    currentShortLink: ''
+                    sourceLink: 'fsdfsd',
+                    currentShortLink: 'fsdfsd'
                 }
             },
             methods: {
                 generateShortLink: async function () {
+                    console.log(this.sourceLink)
                     if(strIsNotEmpty(this.sourceLink)) {
-                        let {data:data} = await request.post('/link-info/generate', {
+                        let response = await request.post('/link-info/generate', {
                             sourceLink: this.sourceLink,
+                        }).catch(function (error){
+                            console.log(error);
+                            errorMessage("短链获取失败")
                         })
-                        console.log(data);
-                        this.currentShortLink = data.result.shortLink
+
+                        if(response.status >=200 && response.status < 300) {
+                            this.currentShortLink = response.data.result.shortLink
+                        }else {
+                            errorMessage(response.data.result.message);
+                        }
                     }else {
                         warningMessage('请输入需要短链的链接');
                     }
