@@ -1,12 +1,15 @@
 package work.linruchang.lrcshortchain.controller;
 
 import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,7 @@ import work.linruchang.lrcshortchain.util.EnhanceSpringUtil;
  **/
 @Controller
 @RequestMapping("link-info")
+@Slf4j
 public class LinkInfoController {
 
     @Autowired
@@ -38,20 +42,26 @@ public class LinkInfoController {
      */
     @PostMapping("generate")
     @ResponseBody
-    public ResponseResult<LinkInfo> generateShortLink(@RequestBody LinkInfo generateLinkInfo) {
+    public ResponseResult<LinkInfo> generateShortLink(@RequestBody final LinkInfo generateLinkInfo) {
         Assert.isTrue(HttpUtil.isHttp(generateLinkInfo.getSourceLink()) || HttpUtil.isHttps(generateLinkInfo.getSourceLink()), () -> new SysetmBaseCustomException(RequestEnum.ResponseCodeEnum.SOURCE_LINK_ERROR));
 
         String linkUuid = UUID.fastUUID().toString(true);
-        generateLinkInfo = generateLinkInfo
+        generateLinkInfo
                 .setShortLink(StrUtil.format("{}/{}", EnhanceSpringUtil.getCurrentContextUrl(), linkUuid))
                 .setUuid(linkUuid)
                 .setSourceUserIp(ServletUtil.getClientIP(EnhanceSpringUtil.getCurrrentRequest()));
 
-        boolean saveFlag = linkInfoService.save(generateLinkInfo);
-        if(saveFlag) {
-            EhcacheUtil.set(linkUuid, generateLinkInfo, DateUnit.DAY.getMillis());
-        }
-        return saveFlag ? ResponseResult.success(generateLinkInfo) : ResponseResult.fail(generateLinkInfo, "生成失败");
+        //异步缓存、持久化加快响应
+        ThreadUtil.execAsync(() -> {
+            try {
+                EhcacheUtil.set(linkUuid, generateLinkInfo, DateUnit.DAY.getMillis());
+                linkInfoService.save(generateLinkInfo);
+            }catch (Exception e) {
+                log.error("短链持久化或缓存失败：【{}】、【{}】",generateLinkInfo, ExceptionUtil.stacktraceToOneLineString(e));
+            }
+        });
+
+        return ResponseResult.success(generateLinkInfo);
     }
 
 
