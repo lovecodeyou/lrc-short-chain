@@ -7,7 +7,7 @@ spring:
   freemarker:
     suffix: .html
   profiles:
-    active: pro
+    active: dev
 
 
 mybatis-plus:
