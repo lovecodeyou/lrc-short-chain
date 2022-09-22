@@ -1,6 +1,6 @@
 ## 在线短链生成器
 
-**后端：** mybatisplus、ehcache、springboot、
+**后端：** mybatisplus、ehcache、springboot
 
 
 **前端：** vue3、elementui-plus
